@@ -1,8 +1,9 @@
 import discord
 from discord.ext import commands
 import random
+import os
 
-TOKEN = process.env.TOKEN
+TOKEN = os.environ.get('TOKEN')
 
 bot = commands.Bot(command_prefix = '_')
 
