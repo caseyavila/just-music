@@ -25,9 +25,24 @@ ytdlopts = {
 ytdl = YoutubeDL(ytdlopts)
 
 
+# class audio_source():
+#     def __init__(self, url):
+#         self.url = url
+# 
+#     def init
+
+
 @bot.command()
 async def hello(ctx):
     await ctx.send('Hello there')
+
+
+@bot.command()
+async def igger(ctx):
+    embed = discord.Embed(color=0x693f1a)
+    embed.set_author(name='Amanda O', icon_url='https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/120/twitter/248/baby_dark-skin-tone_1f476-1f3ff_1f3ff.png')
+    embed.add_field(name='04/01/2020', value='Because it’s too close to the n word. \nIf you replace the underscore with an n, it’s a very offensive racial slur. \nIf you change the name to something more appropriate, I’d be glad to remove it.', inline=True)
+    await ctx.send(embed=embed)
 
 
 @bot.command()
@@ -48,6 +63,8 @@ async def play(ctx, url):
     await summon(ctx)
 
     voice_client = ctx.voice_client
+
+#    if voice_client.is_playing():
 
     data = ytdl.extract_info(url, download=False)
     stream_url = data['formats'][0]['url']
