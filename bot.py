@@ -60,7 +60,7 @@ async def rename(ctx, name):
 
 @bot.command()
 async def play(ctx, url):
-    await summon(ctx)
+    await connect(ctx)
 
     voice_client = ctx.voice_client
 
@@ -95,7 +95,7 @@ async def stop(ctx):
 
 # Joins the voice channel if the user that sends the command
 @bot.command()
-async def summon(ctx):
+async def connect(ctx):
     author_channel = ctx.author.voice.channel
     if ctx.voice_client:
         await ctx.voice_client.move_to(author_channel)
