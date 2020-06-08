@@ -4,6 +4,7 @@ from youtube_dl import YoutubeDL
 import random
 import os
 
+
 admin_list = ['kc#0123']
 
 TOKEN = os.environ.get('TOKEN')
@@ -25,11 +26,16 @@ ytdlopts = {
 ytdl = YoutubeDL(ytdlopts)
 
 
-# class audio_source():
-#     def __init__(self, url):
-#         self.url = url
-# 
-#     def init
+class music():
+    def __init__(self, url):
+        self.url = url
+        self.data = ytdl.extract_info(self.url, download=False)
+        self.stream_url = self.data['formats'][0]['url']
+        self.title = self.data['title']
+
+    def audio_source(self):
+        audio = discord.FFmpegPCMAudio(self.stream_url)
+        return audio
 
 
 @bot.command()
@@ -65,12 +71,11 @@ async def play(ctx, url):
     voice_client = ctx.voice_client
 
 #    if voice_client.is_playing():
+    song = music(url)
 
-    data = ytdl.extract_info(url, download=False)
-    stream_url = data['formats'][0]['url']
+    await ctx.send('Now playing: `{}`'.format(song.title))
+    voice_client.play(song.audio_source())
 
-    audio = discord.FFmpegPCMAudio(stream_url)
-    voice_client.play(audio)
 
 
 @bot.command()
