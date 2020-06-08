@@ -93,11 +93,14 @@ async def stop(ctx):
     voice_client.stop()
 
 
+# Joins the voice channel if the user that sends the command
 @bot.command()
 async def summon(ctx):
-    voice_client = ctx.voice_client  # Attempts to join voice channel if not already in one
-    if not voice_client:
-        voice_client = await ctx.author.voice.channel.connect()
+    author_channel = ctx.author.voice.channel
+    if ctx.voice_client:
+        await ctx.voice_client.move_to(author_channel)
+    else:
+        voice_client = await author_channel.connect()
 
 
 @rename.error
