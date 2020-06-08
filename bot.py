@@ -38,6 +38,24 @@ class music():
         return audio
 
 
+class scheduling():  # Class for managing queues for different guilds
+    def __init__(self):
+        self.queues = {}
+
+    def add_guild(self, guild_id):
+        self.queues[guild_id] = []
+
+    def song_list(self, guild_id):
+        try:
+            return self.queues[guild_id]
+        except KeyError:
+            self.add_guild(guild_id)
+            return self.queues[guild_id]
+
+    def add_song(self, guild_id, song):
+        self.song_list(guild_id).append(song)
+
+
 @bot.command()
 async def hello(ctx):
     await ctx.send('Hello there')
@@ -66,16 +84,30 @@ async def rename(ctx, name):
 
 @bot.command()
 async def play(ctx, url):
-    await connect(ctx)
+    await connect(ctx)  # Connect to the user's voice channel
 
-    voice_client = ctx.voice_client
-
-#    if voice_client.is_playing():
     song = music(url)
+    voice_client = ctx.voice_client
+    
+    schedule.add_song(ctx.guild.id, song)
 
-    await ctx.send('Now playing: `{}`'.format(song.title))
-    voice_client.play(song.audio_source())
+    if voice_client.is_playing():
+        await ctx.send('`{}` added to queue.'.format(song.title))
+    else:
+        voice_client.play(song.audio_source())
+        await ctx.send('Now playing: `{}`'.format(song.title))
 
+
+@bot.command()
+async def queue(ctx):
+    await ctx.send([song.title for song in schedule.song_list(ctx.guild.id)])
+
+
+@bot.command()
+async def skip(ctx):
+    ctx.voice_client.stop()
+    del schedule.song_list(ctx.guild.id)[0]
+    ctx.voice_client.play(schedule.song_list(ctx.guild.id)[0].audio_source())
 
 
 @bot.command()
@@ -113,6 +145,7 @@ async def rename_error(ctx, error):
     print(error)
     await ctx.send('```{}```'.format(error))
 
+schedule = scheduling()
 
 bot.run(TOKEN)
 
