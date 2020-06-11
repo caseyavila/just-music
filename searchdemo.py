@@ -19,7 +19,7 @@ def extract(url):
     data = ytdl.extract_info(url, download=False)
     file = open('output.txt', 'w')
     file.write(str(data))
-    print(data['entries'][0]['formats'][0]['url'])
+    # print(data['entries'][0]['formats'][0]['url'])
     print("file written")
 
-extract('xue hua piao piao lofi remix')
+extract('https://www.youtube.com/playlist?list=PL4o29bINVT4EG_y-k5jGoOu3-Am8Nvi10')

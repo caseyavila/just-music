@@ -30,11 +30,20 @@ class music():
     def __init__(self, url):
         self.url = url
         self.data = ytdl.extract_info(self.url, download=False)
-        self.stream_url = self.data['formats'][0]['url']
-        self.title = self.data['title']
+        self.title = self.video()['title']
+
+    def video(self):
+        # Enable search compatibility with youtube_dl search
+        if self.data['extractor'] == 'youtube:search':
+            return self.data['entries'][0]
+        else:
+            return self.data
+
+    def stream_url(self):
+        return self.video()['formats'][0]['url']
 
     def audio_source(self):
-        audio = discord.FFmpegPCMAudio(self.stream_url)
+        audio = discord.FFmpegPCMAudio(self.stream_url())
         return audio
 
 
@@ -86,7 +95,7 @@ async def rename(ctx, name):
 
 
 @bot.command()
-async def play(ctx, url):
+async def play(ctx, *, url):  # Accept any arguments including spaces
     await connect(ctx)  # Connect to the user's voice channel
 
     song = music(url)
