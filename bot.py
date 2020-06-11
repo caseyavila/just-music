@@ -55,6 +55,9 @@ class scheduling():  # Class for managing queues for different guilds
     def add_song(self, guild_id, song):
         self.song_list(guild_id).append(song)
 
+    def remove_list(self, guild_id):
+        del self.queues[guild_id]
+
 
 @bot.command()
 async def hello(ctx):
@@ -104,6 +107,12 @@ async def queue(ctx):
 
 
 @bot.command()
+async def clear(ctx):
+    schedule.remove_list(ctx.guild.id)
+    await ctx.send('The queue has been cleared.')
+
+
+@bot.command()
 async def skip(ctx):
     ctx.voice_client.stop()
     del schedule.song_list(ctx.guild.id)[0]
@@ -138,6 +147,11 @@ async def connect(ctx):
         await ctx.voice_client.move_to(author_channel)
     else:
         voice_client = await author_channel.connect()
+
+
+@bot.command()
+async def disconnect(ctx):
+    await ctx.voice_client.disconnect()
 
 
 @rename.error
