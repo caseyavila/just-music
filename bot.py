@@ -11,7 +11,7 @@ TOKEN = os.environ.get('TOKEN')
 bot = commands.Bot(command_prefix = '_')
 
 ytdlopts = {
-    'format': 'worstaudio/worst',
+    'format': 'bestaudio/best',
     'restrictfilenames': True,
     'noplaylist': True,
     'nocheckcertificate': True,
