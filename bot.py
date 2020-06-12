@@ -11,7 +11,7 @@ TOKEN = os.environ.get('TOKEN')
 bot = commands.Bot(command_prefix = '_')
 
 ytdlopts = {
-    'format': 'bestaudio/best',
+    'format': 'worstaudio/worst',
     'restrictfilenames': True,
     'noplaylist': True,
     'nocheckcertificate': True,
@@ -20,7 +20,7 @@ ytdlopts = {
     'quiet': True,
     'no_warnings': True,
     'default_search': 'auto',
-    'source_address': '0.0.0.0'
+    'source_address': '0.0.0.0',
 }
 
 ytdl = YoutubeDL(ytdlopts)
