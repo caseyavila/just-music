@@ -23,8 +23,8 @@ ytdlopts = {
     'source_address': '0.0.0.0',
 }
 
-ytdl = YoutubeDL(ytdlopts)
 
+ytdl = YoutubeDL(ytdlopts)
 
 class music():
     def __init__(self, url):
@@ -43,7 +43,7 @@ class music():
         return self.video()['formats'][0]['url']
 
     def audio_source(self):
-        audio = discord.FFmpegPCMAudio(self.stream_url())
+        audio = discord.FFmpegPCMAudio(self.stream_url(), before_options="-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5")
         return audio
 
 
