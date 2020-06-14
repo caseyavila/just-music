@@ -10,7 +10,7 @@ admin_list = ['kc#0123']
 TOKEN = os.environ.get('TOKEN')
 bot = commands.Bot(command_prefix = '_')
 
-ytdlopts = {
+ytdl_opts = {
     'format': 'bestaudio/best',
     'restrictfilenames': True,
     'noplaylist': True,
@@ -24,8 +24,7 @@ ytdlopts = {
 }
 
 ffmpeg_opts = "-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5"
-
-ytdl = YoutubeDL(ytdlopts)
+ytdl = YoutubeDL(ytdl_opts)
 
 
 class music():
@@ -45,7 +44,7 @@ class music():
         return self.video()['formats'][0]['url']
 
     def audio_source(self):
-        audio = discord.FFmpegPCMAudio(self.stream_url(), before_options=ffmpegopts)
+        audio = discord.FFmpegPCMAudio(self.stream_url(), before_options=ffmpeg_opts)
         return audio
 
 
@@ -53,20 +52,20 @@ class scheduling():  # Class for managing queues for different guilds
     def __init__(self):
         self.queues = {}
 
-    def add_guild(self, guild_id):
+    def add_queue(self, guild_id):
         self.queues[guild_id] = []
 
     def song_list(self, guild_id):
         try:
             return self.queues[guild_id]
         except KeyError:
-            self.add_guild(guild_id)
+            self.add_queue(guild_id)
             return self.queues[guild_id]
 
     def add_song(self, guild_id, song):
         self.song_list(guild_id).append(song)
 
-    def remove_list(self, guild_id):
+    def remove_queue(self, guild_id):
         del self.queues[guild_id]
 
 
@@ -108,7 +107,7 @@ async def play(ctx, *, url):  # Accept any arguments including spaces
     if voice_client.is_playing():
         await ctx.send('`{}` added to queue.'.format(song.title))
     else:
-        voice_client.play(song.audio_source())
+        voice_client.play(song.audio_source(), after=lambda _: next_song(ctx))
         await ctx.send('Now playing: `{}`'.format(song.title))
 
 
@@ -119,15 +118,17 @@ async def queue(ctx):
 
 @bot.command()
 async def clear(ctx):
-    schedule.remove_list(ctx.guild.id)
+    schedule.remove_queue(ctx.guild.id)
     await ctx.send('The queue has been cleared.')
-
 
 @bot.command()
 async def skip(ctx):
     ctx.voice_client.stop()
+
+
+def next_song(ctx):
     del schedule.song_list(ctx.guild.id)[0]
-    ctx.voice_client.play(schedule.song_list(ctx.guild.id)[0].audio_source())
+    ctx.voice_client.play(schedule.song_list(ctx.guild.id)[0].audio_source(), after=lambda _: next_song(ctx))
 
 
 @bot.command()
@@ -146,8 +147,8 @@ async def resume(ctx):
 
 @bot.command()
 async def stop(ctx):
-    voice_client = ctx.voice_client
-    voice_client.stop()
+    schedule.remove_queue(ctx.guild.id)
+    ctx.voice_client.stop()
 
 
 # Joins the voice channel if the user that sends the command
