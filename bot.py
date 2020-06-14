@@ -88,7 +88,7 @@ async def rng(ctx, max: int):
 
 
 @bot.command()
-async def rename(ctx, name):
+async def rename(ctx, *, name):
     if str(ctx.message.author) in admin_list:
         await bot.user.edit(username=name)
     else:
