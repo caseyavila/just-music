@@ -163,6 +163,7 @@ async def connect(ctx):
 
 @bot.command()
 async def disconnect(ctx):
+    schedule.remove_queue(ctx.guild.id)
     await ctx.voice_client.disconnect()
 
 
