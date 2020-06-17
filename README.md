@@ -1,4 +1,4 @@
 # discord-bot
 A Discord bot for personal use.
 
-Intended to be run with Heroku; however, it can be run locally.
+Intended to be run with Heroku. However, it can be run locally.
