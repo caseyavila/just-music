@@ -1,6 +1,7 @@
 import discord
 from discord.ext import commands
 from youtube_dl import YoutubeDL
+import datetime
 import random
 import os
 
@@ -32,6 +33,7 @@ class music():
         self.url = url
         self.data = ytdl.extract_info(self.url, download=False)
         self.title = self.video()['title']
+        self.webpage_url = self.video()['webpage_url']
 
     def video(self):
         # Enable search compatibility with youtube_dl search
@@ -39,6 +41,10 @@ class music():
             return self.data['entries'][0]
         else:
             return self.data
+
+    def duration(self):
+        seconds = int(self.video()['duration'])
+        return str(datetime.timedelta(seconds=seconds))
 
     def stream_url(self):
         return self.video()['formats'][0]['url']
@@ -115,6 +121,14 @@ async def play(ctx, *, url):  # Accept any arguments including spaces
 async def queue(ctx):
     await ctx.send([song.title for song in schedule.song_list(ctx.guild.id)])
 
+@bot.command()
+async def np(ctx):
+    embed = discord.Embed(color=0xffffff, title='Now Playing')
+    embed.add_field(name='Title', value=schedule.song_list(ctx.guild.id)[0].title)
+    embed.add_field(name='Length', value=schedule.song_list(ctx.guild.id)[0].duration())
+    embed.add_field(name='URL', value=schedule.song_list(ctx.guild.id)[0].webpage_url)
+    await ctx.send(embed=embed)
+
 
 @bot.command()
 async def clear(ctx):
@@ -124,6 +138,7 @@ async def clear(ctx):
 @bot.command()
 async def skip(ctx):
     ctx.voice_client.stop()
+    await ctx.send('Skipped! (｡•̀ᴗ-)✧')
 
 
 def next_song(ctx):
