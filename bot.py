@@ -126,7 +126,7 @@ async def queue(ctx):
             # Embed links in the title of each song
             embed.add_field(name='Now playing - use "np" for more info', value='[{}]({})'.format(song.title, song.webpage_url), inline=False)
         else:
-            embed.add_field(name=index, value='[{}]({})'.format(song.title, song.webpage_url), inline=False)
+            embed.add_field(name='{}:'.format(index), value='[{}]({})'.format(song.title, song.webpage_url), inline=False)
     await ctx.send(embed=embed)
 
 
