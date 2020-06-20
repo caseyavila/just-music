@@ -125,7 +125,7 @@ async def queue(ctx):
 
 @bot.command()
 async def np(ctx):
-    embed = discord.Embed(color=0xffffff, title='Now Playing')
+    embed = discord.Embed(color=0xf7ecb2, title='Now Playing')
     embed.set_image(url=schedule.song_list(ctx.guild.id)[0].thumbnail_url)
     embed.add_field(name='Title', value=schedule.song_list(ctx.guild.id)[0].title, inline=False)
     embed.add_field(name='Length', value=schedule.song_list(ctx.guild.id)[0].duration(), inline=False)
@@ -137,6 +137,7 @@ async def np(ctx):
 async def clear(ctx):
     schedule.remove_queue(ctx.guild.id)
     await ctx.send('The queue has been cleared.')
+
 
 @bot.command()
 async def skip(ctx):
