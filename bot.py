@@ -123,6 +123,7 @@ async def queue(ctx):
     embed = discord.Embed(color=0xf7ecb2, title='Queue')
     for index, song in enumerate(schedule.song_list(ctx.guild.id)):
         if index == 0:
+            # Embed links in the title of each song
             embed.add_field(name='Now playing - use "np" for more info', value='[{}]({})'.format(song.title, song.webpage_url), inline=False)
         else:
             embed.add_field(name=index, value='[{}]({})'.format(song.title, song.webpage_url), inline=False)
@@ -140,6 +141,13 @@ async def np(ctx):
 
 
 @bot.command()
+async def remove(ctx, index :int):
+    song_list = schedule.song_list(ctx.guild.id)
+    del song_list[index]
+    await ctx.send('Removed song #{} from the queue.'.format(index))
+
+
+@bot.command()
 async def clear(ctx):
     schedule.remove_queue(ctx.guild.id)
     await ctx.send('The queue has been cleared.')
@@ -149,7 +157,6 @@ async def clear(ctx):
 async def skip(ctx):
     ctx.voice_client.stop()
     await ctx.send('Skipped! (｡•̀ᴗ-)✧')
-
 
 def next_song(ctx):
     del schedule.song_list(ctx.guild.id)[0]
