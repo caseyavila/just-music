@@ -120,13 +120,19 @@ async def play(ctx, *, url):  # Accept any arguments including spaces
 
 @bot.command()
 async def queue(ctx):
-    await ctx.send([song.title for song in schedule.song_list(ctx.guild.id)])
+    embed = discord.Embed(color=0xf7ecb2, title='Queue')
+    for index, song in enumerate(schedule.song_list(ctx.guild.id)):
+        if index == 0:
+            embed.add_field(name='Now playing - use "np" for more info', value='[{}]({})'.format(song.title, song.webpage_url), inline=False)
+        else:
+            embed.add_field(name=index, value='[{}]({})'.format(song.title, song.webpage_url), inline=False)
+    await ctx.send(embed=embed)
 
 
 @bot.command()
 async def np(ctx):
     embed = discord.Embed(color=0xf7ecb2, title='Now Playing')
-    embed.set_image(url=schedule.song_list(ctx.guild.id)[0].thumbnail_url)
+    embed.set_thumbnail(url=schedule.song_list(ctx.guild.id)[0].thumbnail_url)
     embed.add_field(name='Title', value=schedule.song_list(ctx.guild.id)[0].title, inline=False)
     embed.add_field(name='Length', value=schedule.song_list(ctx.guild.id)[0].duration(), inline=False)
     embed.add_field(name='URL', value=schedule.song_list(ctx.guild.id)[0].webpage_url, inline=False)
