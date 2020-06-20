@@ -34,6 +34,7 @@ class music():
         self.data = ytdl.extract_info(self.url, download=False)
         self.title = self.video()['title']
         self.webpage_url = self.video()['webpage_url']
+        self.thumbnail_url = self.video()['thumbnail']
 
     def video(self):
         # Enable search compatibility with youtube_dl search
@@ -121,12 +122,14 @@ async def play(ctx, *, url):  # Accept any arguments including spaces
 async def queue(ctx):
     await ctx.send([song.title for song in schedule.song_list(ctx.guild.id)])
 
+
 @bot.command()
 async def np(ctx):
     embed = discord.Embed(color=0xffffff, title='Now Playing')
-    embed.add_field(name='Title', value=schedule.song_list(ctx.guild.id)[0].title)
-    embed.add_field(name='Length', value=schedule.song_list(ctx.guild.id)[0].duration())
-    embed.add_field(name='URL', value=schedule.song_list(ctx.guild.id)[0].webpage_url)
+    embed.set_image(url=schedule.song_list(ctx.guild.id)[0].thumbnail_url)
+    embed.add_field(name='Title', value=schedule.song_list(ctx.guild.id)[0].title, inline=False)
+    embed.add_field(name='Length', value=schedule.song_list(ctx.guild.id)[0].duration(), inline=False)
+    embed.add_field(name='URL', value=schedule.song_list(ctx.guild.id)[0].webpage_url, inline=False)
     await ctx.send(embed=embed)
 
 
