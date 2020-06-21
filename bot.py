@@ -124,7 +124,7 @@ async def queue(ctx):
     for index, song in enumerate(schedule.song_list(ctx.guild.id)):
         if index == 0:
             # Embed links in the title of each song
-            embed.add_field(name='Now playing - use "np" for more info', value='[{}]({})'.format(song.title, song.webpage_url), inline=False)
+            embed.add_field(name='Now playing:', value='[{}]({})'.format(song.title, song.webpage_url), inline=False)
         else:
             embed.add_field(name='{}:'.format(index), value='[{}]({})'.format(song.title, song.webpage_url), inline=False)
     await ctx.send(embed=embed)
