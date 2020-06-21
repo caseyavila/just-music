@@ -173,8 +173,7 @@ async def stop(ctx):
     ctx.voice_client.stop()
 
 
-# Joins the voice channel if the user that sends the command
-@bot.command()
+@bot.command()  # Joins the voice channel if the user that sends the command
 async def connect(ctx):
     author_channel = ctx.author.voice.channel
     if ctx.voice_client:
