@@ -6,8 +6,6 @@ import random
 import os
 
 
-admin_list = ['kc#0123']
-
 TOKEN = os.environ.get('TOKEN')
 bot = commands.Bot(command_prefix = '_')
 
@@ -92,14 +90,6 @@ async def igger(ctx):
 @bot.command()
 async def rng(ctx, max: int):
     await ctx.send(random.randint(1, max))
-
-
-@bot.command()
-async def rename(ctx, *, name):
-    if str(ctx.message.author) in admin_list:
-        await bot.user.edit(username=name)
-    else:
-        await ctx.send('ur not allowed to do that...')
 
 
 @bot.command()
@@ -198,11 +188,6 @@ async def disconnect(ctx):
     schedule.remove_queue(ctx.guild.id)
     await ctx.voice_client.disconnect()
 
-
-@rename.error
-async def rename_error(ctx, error):
-    print(error)
-    await ctx.send('```{}```'.format(error))
 
 schedule = scheduling()
 
