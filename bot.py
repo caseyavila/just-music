@@ -123,7 +123,7 @@ async def queue(ctx):
         await ctx.send('There is nothing in the queue!')
 
 
-@bot.command()
+@bot.command(aliases=['now', 'current', 'currentsong', 'playing'])
 async def np(ctx):
     song_list = schedule.song_list(ctx.guild.id)
     embed = discord.Embed(color=0xf7ecb2, title='Now Playing')
