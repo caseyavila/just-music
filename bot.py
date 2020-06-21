@@ -136,9 +136,10 @@ async def np(ctx):
 
 @bot.command()
 async def remove(ctx, index :int):
-    song_list = schedule.song_list(ctx.guild.id)
-    del song_list[index]
-    await ctx.send('Removed song #{} from the queue.'.format(index))
+    if index > 0:
+        song_list = schedule.song_list(ctx.guild.id)
+        del song_list[index]
+        await ctx.send('Removed song #{} from the queue.'.format(index))
 
 
 @bot.command()
