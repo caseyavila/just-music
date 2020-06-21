@@ -111,22 +111,26 @@ async def play(ctx, *, url):  # Accept any arguments including spaces
 @bot.command()
 async def queue(ctx):
     embed = discord.Embed(color=0xf7ecb2, title='Queue')
-    for index, song in enumerate(schedule.song_list(ctx.guild.id)):
-        if index == 0:
-            # Embed links in the title of each song
-            embed.add_field(name='Now playing:', value='[{}]({})'.format(song.title, song.webpage_url), inline=False)
-        else:
-            embed.add_field(name='{}:'.format(index), value='[{}]({})'.format(song.title, song.webpage_url), inline=False)
-    await ctx.send(embed=embed)
+    if schedule.song_list(ctx.guild.id):  # If there is something in the queue
+        for index, song in enumerate(schedule.song_list(ctx.guild.id)):
+            if index == 0:
+                # Embed links in the title of each song
+                embed.add_field(name='Now playing:', value='[{}]({})'.format(song.title, song.webpage_url), inline=False)
+            else:
+                embed.add_field(name='{}:'.format(index), value='[{}]({})'.format(song.title, song.webpage_url), inline=False)
+        await ctx.send(embed=embed)
+    else:
+        await ctx.send('There is nothing in the queue!')
 
 
 @bot.command()
 async def np(ctx):
+    song_list = schedule.song_list(ctx.guild.id)
     embed = discord.Embed(color=0xf7ecb2, title='Now Playing')
     embed.set_thumbnail(url=schedule.song_list(ctx.guild.id)[0].thumbnail_url)
-    embed.add_field(name='Title', value=schedule.song_list(ctx.guild.id)[0].title, inline=False)
-    embed.add_field(name='Length', value=schedule.song_list(ctx.guild.id)[0].duration(), inline=False)
-    embed.add_field(name='URL', value=schedule.song_list(ctx.guild.id)[0].webpage_url, inline=False)
+    embed.add_field(name='Title', value=song_list[0].title, inline=False)
+    embed.add_field(name='Length', value=song_list[0].duration(), inline=False)
+    embed.add_field(name='URL', value=song_list[0].webpage_url, inline=False)
     await ctx.send(embed=embed)
 
 
@@ -149,8 +153,9 @@ async def skip(ctx):
     await ctx.send('Skipped! (｡•̀ᴗ-)✧')
 
 def next_song(ctx):
-    del schedule.song_list(ctx.guild.id)[0]
-    ctx.voice_client.play(schedule.song_list(ctx.guild.id)[0].audio_source(), after=lambda _: next_song(ctx))
+    song_list = schedule.song_list(ctx.guild.id)
+    del song_list[0]
+    ctx.voice_client.play(song_list[0].audio_source(), after=lambda _: next_song(ctx))
 
 
 @bot.command()
