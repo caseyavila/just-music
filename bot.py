@@ -53,7 +53,8 @@ class music():
         return audio
 
 
-class scheduling():  # Class for managing queues for different guilds
+# Class for managing queues for different guilds
+class scheduling():
     def __init__(self):
         self.queues = {}
 
@@ -92,9 +93,11 @@ async def rng(ctx, max: int):
     await ctx.send(random.randint(1, max))
 
 
+# Accept any arguments including spaces
 @bot.command()
-async def play(ctx, *, url):  # Accept any arguments including spaces
-    await connect(ctx)  # Connect to the user's voice channel
+async def play(ctx, *, url):  
+    # Connect to the user's voice channel
+    await connect(ctx)
 
     song = music(url)
     voice_client = ctx.voice_client
@@ -111,7 +114,8 @@ async def play(ctx, *, url):  # Accept any arguments including spaces
 @bot.command()
 async def queue(ctx):
     embed = discord.Embed(color=0xf7ecb2, title='Queue')
-    if schedule.song_list(ctx.guild.id):  # If there is something in the queue
+    # If there is something in the queue
+    if schedule.song_list(ctx.guild.id):
         for index, song in enumerate(schedule.song_list(ctx.guild.id)):
             if index == 0:
                 # Embed links in the title of each song
@@ -119,7 +123,8 @@ async def queue(ctx):
             else:
                 embed.add_field(name='{}:'.format(index), value='[{}]({})'.format(song.title, song.webpage_url), inline=False)
         await ctx.send(embed=embed)
-    else:  # If nothing is in the queue
+     # If nothing is in the queue
+    else:
         await ctx.send('There is nothing in the queue!')
 
 
@@ -179,8 +184,9 @@ async def stop(ctx):
     ctx.voice_client.stop()
 
 
-@bot.command()  # Joins the voice channel if the user that sends the command
+@bot.command()
 async def connect(ctx):
+    # Joins the voice channel if the user that sends the command
     author_channel = ctx.author.voice.channel
     if ctx.voice_client:
         await ctx.voice_client.move_to(author_channel)
