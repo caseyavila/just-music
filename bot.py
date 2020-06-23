@@ -119,7 +119,7 @@ async def queue(ctx):
             else:
                 embed.add_field(name='{}:'.format(index), value='[{}]({})'.format(song.title, song.webpage_url), inline=False)
         await ctx.send(embed=embed)
-    else:
+    else:  # If nothing is in the queue
         await ctx.send('There is nothing in the queue!')
 
 
@@ -136,7 +136,7 @@ async def np(ctx):
 
 @bot.command()
 async def remove(ctx, index :int):
-    if index > 0:
+    if index > 0:  # Prevent removing song number 0
         song_list = schedule.song_list(ctx.guild.id)
         del song_list[index]
         await ctx.send('Removed song #{} from the queue.'.format(index))
