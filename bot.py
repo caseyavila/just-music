@@ -144,7 +144,8 @@ async def np(ctx):
 
 @bot.command()
 async def remove(ctx, index :int):
-    if index > 0:  # Prevent removing song number 0
+    # Prevent removing song number 0
+    if index > 0:
         song_list = schedule.song_list(ctx.guild.id)
         del song_list[index]
         await ctx.send('Removed song #{} from the queue.'.format(index))
@@ -190,7 +191,11 @@ async def stop(ctx):
 @bot.command()
 async def connect(ctx):
     # Joins the voice channel if the user that sends the command
-    author_channel = ctx.author.voice.channel
+    try:
+        author_channel = ctx.author.voice.channel
+    # If the command sender is not in a voice channel
+    except AttributeError:
+        await ctx.send('But you\'re not in a voice channel... ◑﹏◐')
     if ctx.voice_client:
         await ctx.voice_client.move_to(author_channel)
     else:
