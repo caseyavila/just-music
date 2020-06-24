@@ -42,8 +42,11 @@ class music():
             return self.data
 
     def duration(self):
-        seconds = int(self.video()['duration'])
-        return str(datetime.timedelta(seconds=seconds))
+        if self.video()['is_live']:
+            return '∞'
+        else:
+            seconds = int(self.video()['duration'])
+            return str(datetime.timedelta(seconds=seconds))
 
     def stream_url(self):
         return self.video()['formats'][0]['url']
