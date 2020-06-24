@@ -130,13 +130,16 @@ async def queue(ctx):
 
 @bot.command(aliases=['now', 'current', 'currentsong', 'playing'])
 async def np(ctx):
-    song_list = schedule.song_list(ctx.guild.id)
-    embed = discord.Embed(color=0xf7ecb2, title='Now Playing')
-    embed.set_thumbnail(url=schedule.song_list(ctx.guild.id)[0].thumbnail_url)
-    embed.add_field(name='Title', value=song_list[0].title, inline=False)
-    embed.add_field(name='Length', value=song_list[0].duration(), inline=False)
-    embed.add_field(name='URL', value=song_list[0].webpage_url, inline=False)
-    await ctx.send(embed=embed)
+    if schedule.song_list(ctx.guild.id):
+        song_list = schedule.song_list(ctx.guild.id)
+        embed = discord.Embed(color=0xf7ecb2, title='Now Playing')
+        embed.set_thumbnail(url=schedule.song_list(ctx.guild.id)[0].thumbnail_url)
+        embed.add_field(name='Title', value=song_list[0].title, inline=False)
+        embed.add_field(name='Length', value=song_list[0].duration(), inline=False)
+        embed.add_field(name='URL', value=song_list[0].webpage_url, inline=False)
+        await ctx.send(embed=embed)
+    else:
+        await ctx.send('There is nothing playing right now!')
 
 
 @bot.command()
