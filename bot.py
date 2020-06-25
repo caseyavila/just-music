@@ -216,7 +216,7 @@ async def disconnect(ctx):
 
 @bot.command()
 async def english(ctx, *, words):
-    translation = translator.translate(words)
+    translation = translator.translate(words, dest='en')
     await ctx.send(translation.text)
 
 
