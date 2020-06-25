@@ -80,7 +80,7 @@ class scheduling():
 
 @bot.command()
 async def hello(ctx):
-    await ctx.send('Hello there')
+    await ctx.send('Hello there!')
 
 
 @bot.command()
