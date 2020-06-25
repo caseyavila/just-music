@@ -1,6 +1,7 @@
 import discord
 from discord.ext import commands
 from youtube_dl import YoutubeDL
+from googletrans import Translator
 import datetime
 import random
 import os
@@ -24,6 +25,8 @@ ytdl_opts = {
 
 ffmpeg_opts = '-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5'
 ytdl = YoutubeDL(ytdl_opts)
+
+translator = Translator()
 
 
 class music():
@@ -209,6 +212,31 @@ async def connect(ctx):
 async def disconnect(ctx):
     schedule.remove_queue(ctx.guild.id)
     await ctx.voice_client.disconnect()
+
+
+@bot.command()
+async def english(ctx, *, words):
+    translation = translator.translate(words)
+    await ctx.send(translation.text)
+
+
+@bot.command()
+async def chinese(ctx, *, words):
+    # Traditional chinese trnaslation
+    translation = translator.translate(words, dest='zh-tw')
+    await ctx.send('{} - {}'.format(translation.text, translation.pronunciation))
+
+
+@bot.command()
+async def spanish(ctx, *, words):
+    translation = translator.translate(words, dest='es')
+    await ctx.send(translation.text)
+
+
+@bot.command()
+async def french(ctx, *, words):
+    translation = translator.translate(words, dest='fr')
+    await ctx.send(translation.text)
 
 
 schedule = scheduling()
