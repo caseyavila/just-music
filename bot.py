@@ -36,6 +36,7 @@ class Music():
         self.title = self.video()['title']
         self.webpage_url = self.video()['webpage_url']
         self.thumbnail_url = self.video()['thumbnail']
+        self.loop = False
 
     def video(self):
         # Enable search compatibility with youtube_dl search
@@ -57,6 +58,12 @@ class Music():
     def audio_source(self):
         audio = discord.FFmpegPCMAudio(self.stream_url(), before_options=ffmpeg_opts)
         return audio
+
+    def set_loop(self, boolean):
+        self.loop = boolean
+
+    def is_loop(self):
+        return self.loop
 
 
 # Class for managing queues for different guilds
@@ -109,18 +116,19 @@ async def play(ctx, *, url):
     # Connect to the user's voice channel
     await connect(ctx)
 
-    # Construct Music object
-    song = Music(url)
-    voice_client = ctx.voice_client
-    
-    # Add Music object to queue
-    schedule.add_song(ctx.guild.id, song)
+    # If connection to the voice channel succedes
+    if ctx.voice_client:
+        # Construct Music object
+        song = Music(url)
+        
+        # Add Music object to queue
+        schedule.add_song(ctx.guild.id, song)
 
-    if voice_client.is_playing():
-        await ctx.send('`{}` added to queue.'.format(song.title))
-    else:
-        voice_client.play(song.audio_source(), after=lambda _: next_song(ctx))
-        await ctx.send('Now playing: `{}`'.format(song.title))
+        if ctx.voice_client.is_playing():
+            await ctx.send('`{}` added to queue.'.format(song.title))
+        else:
+            ctx.voice_client.play(song.audio_source(), after=lambda _: next_song(ctx))
+            await ctx.send('Now playing: `{}`'.format(song.title))
 
 
 @bot.command()
@@ -149,6 +157,7 @@ async def np(ctx):
         embed.add_field(name='Title', value=song_list[0].title, inline=False)
         embed.add_field(name='Length', value=song_list[0].duration(), inline=False)
         embed.add_field(name='URL', value=song_list[0].webpage_url, inline=False)
+        embed.add_field(name='Looping', value=song_list[0].is_loop(), inline=False)
         await ctx.send(embed=embed)
     else:
         await ctx.send('There is nothing playing right now!')
@@ -172,12 +181,19 @@ async def clear(ctx):
 
 @bot.command()
 async def skip(ctx):
+    # Remove loop
+    schedule.get_queue(ctx.guild.id)[0].set_loop(False)
+    # Stop playing music
     ctx.voice_client.stop()
     await ctx.send('Skipped! (｡•̀ᴗ-)✧')
 
 def next_song(ctx):
     song_list = schedule.get_queue(ctx.guild.id)
-    del song_list[0]
+    # If the song is set to loop
+    if song_list[0].is_loop():
+        pass
+    else:
+        del song_list[0]
     ctx.voice_client.play(song_list[0].audio_source(), after=lambda _: next_song(ctx))
 
 
@@ -202,17 +218,28 @@ async def stop(ctx):
 
 
 @bot.command()
+async def loop(ctx):
+    song = schedule.get_queue(ctx.guild.id)[0]
+    if song.is_loop():
+        song.set_loop(False)
+        await ctx.send('Stopped looping `{}`'.format(song.title))
+    else:
+        song.set_loop(True)
+        await ctx.send('Started looping `{}`'.format(song.title))
+
+
+@bot.command()
 async def connect(ctx):
     # Joins the voice channel if the user that sends the command
     try:
         author_channel = ctx.author.voice.channel
+        if ctx.voice_client:
+            await ctx.voice_client.move_to(author_channel)
+        else:
+            voice_client = await author_channel.connect()
     # If the command sender is not in a voice channel
     except AttributeError:
         await ctx.send('But you\'re not in a voice channel... ◑﹏◐')
-    if ctx.voice_client:
-        await ctx.voice_client.move_to(author_channel)
-    else:
-        voice_client = await author_channel.connect()
 
 
 @bot.command()
