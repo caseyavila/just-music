@@ -64,21 +64,21 @@ class scheduling():
     def __init__(self):
         self.queues = {}
 
-    def add_queue(self, guild_id):
-        self.queues[guild_id] = []
-
-    def song_list(self, guild_id):
+    def get_queue(self, guild_id):
         try:
             return self.queues[guild_id]
         except KeyError:
             self.add_queue(guild_id)
             return self.queues[guild_id]
 
-    def add_song(self, guild_id, song):
-        self.song_list(guild_id).append(song)
+    def add_queue(self, guild_id):
+        self.queues[guild_id] = []
 
     def remove_queue(self, guild_id):
         del self.queues[guild_id]
+
+    def add_song(self, guild_id, song):
+        self.song_list(guild_id).append(song)
 
 
 @bot.command()
@@ -121,8 +121,8 @@ async def play(ctx, *, url):
 async def queue(ctx):
     embed = discord.Embed(color=0xf7ecb2, title='Queue')
     # If there is something in the queue
-    if schedule.song_list(ctx.guild.id):
-        for index, song in enumerate(schedule.song_list(ctx.guild.id)):
+    if schedule.get_queue(ctx.guild.id):
+        for index, song in enumerate(schedule.get_queue(ctx.guild.id)):
             if index == 0:
                 # Embed links in the title of each song
                 embed.add_field(name='Now playing:', value='[{}]({})'.format(song.title, song.webpage_url), inline=False)
@@ -136,10 +136,10 @@ async def queue(ctx):
 
 @bot.command(aliases=['now', 'current', 'currentsong', 'playing'])
 async def np(ctx):
-    if schedule.song_list(ctx.guild.id):
-        song_list = schedule.song_list(ctx.guild.id)
+    if schedule.get_queue(ctx.guild.id):
+        song_list = schedule.get_queue(ctx.guild.id)
         embed = discord.Embed(color=0xf7ecb2, title='Now Playing')
-        embed.set_thumbnail(url=schedule.song_list(ctx.guild.id)[0].thumbnail_url)
+        embed.set_thumbnail(url=schedule.get_queue(ctx.guild.id)[0].thumbnail_url)
         embed.add_field(name='Title', value=song_list[0].title, inline=False)
         embed.add_field(name='Length', value=song_list[0].duration(), inline=False)
         embed.add_field(name='URL', value=song_list[0].webpage_url, inline=False)
@@ -152,7 +152,7 @@ async def np(ctx):
 async def remove(ctx, index :int):
     # Prevent removing song number 0
     if index > 0:
-        song_list = schedule.song_list(ctx.guild.id)
+        song_list = schedule.get_queue(ctx.guild.id)
         del song_list[index]
         await ctx.send('Removed song #{} from the queue.'.format(index))
 
@@ -169,7 +169,7 @@ async def skip(ctx):
     await ctx.send('Skipped! (｡•̀ᴗ-)✧')
 
 def next_song(ctx):
-    song_list = schedule.song_list(ctx.guild.id)
+    song_list = schedule.get_queue(ctx.guild.id)
     del song_list[0]
     ctx.voice_client.play(song_list[0].audio_source(), after=lambda _: next_song(ctx))
 
