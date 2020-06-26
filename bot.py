@@ -101,6 +101,7 @@ async def igger(ctx):
 async def rng(ctx, max: int):
     await ctx.send(random.randint(1, max))
 
+# Beginning of voice/music commands
 
 # Accept any arguments including spaces
 @bot.command()
@@ -158,8 +159,9 @@ async def remove(ctx, index :int):
     # Prevent removing song number 0
     if index > 0:
         song_list = schedule.get_queue(ctx.guild.id)
+        title = song_list[index].title
         del song_list[index]
-        await ctx.send('Removed song #{} from the queue.'.format(index))
+        await ctx.send('Removed `{}` from the queue.'.format(title))
 
 
 @bot.command()
@@ -218,6 +220,8 @@ async def disconnect(ctx):
     schedule.remove_queue(ctx.guild.id)
     await ctx.voice_client.disconnect()
 
+# End of voice/music commands
+# Beginning of translation commands
 
 @bot.command()
 async def english(ctx, *, words):
