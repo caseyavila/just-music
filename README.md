@@ -10,4 +10,4 @@ Intended to be run with Heroku. However, it can be run locally.
 - [x] Translation to English, Spanish, French, Chinese, and Japanese
 - [ ] Soundcloud
 - [ ] Bandcamp
-- [ ] Other stuff... let kc#0123 know if you want a specific functionality.
+- [ ] Other stuff... Open an issue to let me know of anything you want added!
