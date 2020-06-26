@@ -224,6 +224,7 @@ async def english(ctx, *, words):
 async def chinese(ctx, *, words):
     # Traditional chinese trnaslation
     translation = translator.translate(words, dest='zh-tw')
+    # Send latin pronunciation
     await ctx.send('{} - {}'.format(translation.text, translation.pronunciation))
 
 
@@ -237,6 +238,13 @@ async def spanish(ctx, *, words):
 async def french(ctx, *, words):
     translation = translator.translate(words, dest='fr')
     await ctx.send(translation.text)
+
+
+@bot.command()
+async def japanese(ctx, *, words):
+    translation = translator.translate(words, dest='ja')
+    # Send latin pronunciation
+    await ctx.send('{} - {}'.format(translation.text, translation.pronunciation))
 
 
 schedule = scheduling()
