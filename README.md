@@ -6,7 +6,8 @@ Intended to be run with Heroku. However, it can be run locally.
 ## Features
 - [x] Youtube Music
 - [x] Queing
-- [x] Basic commands: np, stop, pause, resume, clear, etc.
+- [x] Looping
+- [x] Other basic music commands: np, stop, pause, resume, clear, etc.
 - [x] Translation to English, Spanish, French, Chinese, and Japanese
 - [ ] Soundcloud
 - [ ] Bandcamp
