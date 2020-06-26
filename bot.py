@@ -78,7 +78,7 @@ class scheduling():
         del self.queues[guild_id]
 
     def add_song(self, guild_id, song):
-        self.song_list(guild_id).append(song)
+        self.get_queue(guild_id).append(song)
 
 
 @bot.command()
