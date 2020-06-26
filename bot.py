@@ -29,7 +29,7 @@ ytdl = YoutubeDL(ytdl_opts)
 translator = Translator()
 
 
-class music():
+class Music():
     def __init__(self, url):
         self.url = url
         self.data = ytdl.extract_info(self.url, download=False)
@@ -60,7 +60,7 @@ class music():
 
 
 # Class for managing queues for different guilds
-class scheduling():
+class Scheduling():
     def __init__(self):
         self.queues = {}
 
@@ -79,6 +79,9 @@ class scheduling():
 
     def add_song(self, guild_id, song):
         self.get_queue(guild_id).append(song)
+
+# Construct Scheduling object
+schedule = Scheduling()
 
 
 @bot.command()
@@ -105,9 +108,11 @@ async def play(ctx, *, url):
     # Connect to the user's voice channel
     await connect(ctx)
 
-    song = music(url)
+    # Construct Music object
+    song = Music(url)
     voice_client = ctx.voice_client
     
+    # Add Music object to queue
     schedule.add_song(ctx.guild.id, song)
 
     if voice_client.is_playing():
@@ -246,8 +251,6 @@ async def japanese(ctx, *, words):
     # Send latin pronunciation
     await ctx.send('{} - {}'.format(translation.text, translation.pronunciation))
 
-
-schedule = scheduling()
 
 bot.run(TOKEN)
 
