@@ -222,10 +222,10 @@ async def loop(ctx):
     song = schedule.get_queue(ctx.guild.id)[0]
     if song.is_loop():
         song.set_loop(False)
-        await ctx.send('Stopped looping `{}`'.format(song.title))
+        await ctx.send('Stopped looping: `{}`'.format(song.title))
     else:
         song.set_loop(True)
-        await ctx.send('Started looping `{}`'.format(song.title))
+        await ctx.send('Started looping: `{}`'.format(song.title))
 
 
 @bot.command()
