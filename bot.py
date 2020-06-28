@@ -279,7 +279,7 @@ async def french(ctx, *, words):
 @bot.command()
 async def japanese(ctx, *, words):
     translation = translator.translate(words, dest='ja')
-    # Send latin pronunciation
+    # Send romaji pronunciation
     await ctx.send('{} - {}'.format(translation.text, translation.pronunciation))
 
 
