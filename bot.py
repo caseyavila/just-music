@@ -260,7 +260,7 @@ async def english(ctx, *, words):
 async def chinese(ctx, *, words):
     # Traditional chinese trnaslation
     translation = translator.translate(words, dest='zh-tw')
-    # Send latin pronunciation
+    # Send pinyin
     await ctx.send('{} - {}'.format(translation.text, translation.pronunciation))
 
 
