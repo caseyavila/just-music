@@ -260,7 +260,7 @@ async def english(ctx, *, words):
 async def chinese(ctx, *, words):
     # Traditional chinese trnaslation
     translation = translator.translate(words, dest='zh-tw')
-    # Send pinyin
+    # Send pinyin pronunciation
     await ctx.send('{} - {}'.format(translation.text, translation.pronunciation))
 
 
@@ -280,6 +280,13 @@ async def french(ctx, *, words):
 async def japanese(ctx, *, words):
     translation = translator.translate(words, dest='ja')
     # Send romaji pronunciation
+    await ctx.send('{} - {}'.format(translation.text, translation.pronunciation))
+
+
+@bot.command()
+async def korean(ctx, *, words):
+    translation = translator.translate(words, dest='ko')
+    # Send latin pronunciation
     await ctx.send('{} - {}'.format(translation.text, translation.pronunciation))
 
 
