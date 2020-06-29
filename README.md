@@ -10,5 +10,6 @@ Intended to be run with Heroku. However, it can be run locally.
 - [x] Other basic music commands: np, stop, pause, resume, clear, etc.
 - [x] Translation to English, Spanish, French, Chinese, and Japanese
 - [ ] Soundcloud
+- [ ] Spotify
 - [ ] Bandcamp
 - [ ] Other stuff... Open an issue to let me know of anything you want added!
