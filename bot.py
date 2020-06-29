@@ -97,14 +97,6 @@ async def hello(ctx):
 
 
 @bot.command()
-async def igger(ctx):
-    embed = discord.Embed(color=0x693f1a)
-    embed.set_author(name='Amanda O')
-    embed.add_field(name='04/01/2020', value='Because it’s too close to the n word. \nIf you replace the underscore with an n, it’s a very offensive racial slur. \nIf you change the name to something more appropriate, I’d be glad to remove it.', inline=True)
-    await ctx.send(embed=embed)
-
-
-@bot.command()
 async def rng(ctx, max: int):
     await ctx.send(random.randint(1, max))
 
