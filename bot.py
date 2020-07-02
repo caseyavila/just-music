@@ -167,8 +167,11 @@ async def remove(ctx, index :int):
 
 @bot.command()
 async def clear(ctx):
-    schedule.remove_queue(ctx.guild.id)
-    await ctx.send('The queue has been cleared.')
+    try:
+        del schedule.get_queue(ctx.guild.id)[1:]
+        await ctx.send('The queue has been cleared.')
+    except KeyError:
+        await ctx.send('There was no queue to be cleared.')
 
 
 @bot.command()
