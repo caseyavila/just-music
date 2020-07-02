@@ -165,6 +165,7 @@ async def remove(ctx, index :int):
         await ctx.send('Removed `{}` from the queue.'.format(title))
 
 
+# Clears all songs from queue other than the one playing
 @bot.command()
 async def clear(ctx):
     try:
@@ -172,6 +173,16 @@ async def clear(ctx):
         await ctx.send('The queue has been cleared.')
     except KeyError:
         await ctx.send('There was no queue to be cleared.')
+
+
+# Clears queue including the current song playing, use only as a last resort
+@bot.command()
+async def reset(ctx):
+    try:
+        schedule.remove_queue(ctx.guild.id)
+        await ctx.send('Queue reset, this may break some things...')
+    except KeyError:
+        await ctx.send('Nothing to reset.')
 
 
 @bot.command()
