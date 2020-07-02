@@ -250,7 +250,19 @@ async def english(ctx, *, words):
 
 @bot.command()
 async def chinese(ctx, *, words):
-    # Traditional chinese trnaslation
+    await ctx.send('Chinese is kinda complex... Try using `_traditional` or `_simplified` instead.')
+
+@bot.command()
+async def simplified(ctx, *, words):
+    # Simplified chinese translation
+    translation = translator.translate(words, dest='zh-cn')
+    # Send pinyin pronunciation
+    await ctx.send('{} - {}'.format(translation.text, translation.pronunciation))
+
+
+@bot.command()
+async def traditional(ctx, *, words):
+    # Traditional chinese translation
     translation = translator.translate(words, dest='zh-tw')
     # Send pinyin pronunciation
     await ctx.send('{} - {}'.format(translation.text, translation.pronunciation))
