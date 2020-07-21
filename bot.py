@@ -308,5 +308,10 @@ async def korean(ctx, *, words):
     await ctx.send('{} - {}'.format(translation.text, translation.pronunciation))
 
 
+@bot.command()
+async def servercount(ctx):
+    await ctx.send("I'm in " + str(len(bot.guilds)) + " servers right now.")
+
+
 bot.run(TOKEN)
 
