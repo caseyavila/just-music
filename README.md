@@ -9,6 +9,7 @@ Intended to be run with Heroku. However, it can be run locally.
 - [x] Looping
 - [x] Other basic music commands: np, stop, pause, resume, clear, etc.
 - [x] Translation to English, Spanish, French, Chinese (traditional and simplified), and Japanese
+- [ ] Youtube playlists
 - [ ] Soundcloud
 - [ ] Spotify
 - [ ] Bandcamp
